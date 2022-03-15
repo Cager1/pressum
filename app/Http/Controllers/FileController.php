@@ -21,15 +21,17 @@ class FileController extends Controller
             'name' => 'nullable|string',
             'file' => 'required|file',
             'attributes' => 'nullable|json',
-            'folder' => 'nullable|string'
+            'folder' => 'nullable|string',
+            'book_id' => 'nullable|numeric'
         ]);
 
         $folder = $request->folder ?? '';
         $disk = 'local';
         $file = $request->file('file');
         $name = $request->get('name');
+        $book = $request->book_id;
 
-        return self::uploadFile($file, $name, $folder, $disk);
+        return self::uploadFile($file,$book, $name, $folder, $disk);
     }
 
     public function show(Request $request, ResourceFile $resourceFile)
@@ -50,7 +52,7 @@ class FileController extends Controller
         return response()->json(['message' => 'Success'], 204);
     }
 
-    public static function uploadFile($file, $name = null, $folder = '', $disk = 'local', $jpg = false)
+    public static function uploadFile($file, $book, $name = null, $folder = '', $disk = 'local', $jpg = false)
     {
         $mimetype = $file->getMimeType();
 
@@ -75,7 +77,8 @@ class FileController extends Controller
             'name' => $name,
             'filepath' => $path,
             'mimetype' => $mimetype,
-            'folder' => $folder
+            'folder' => $folder,
+            'book_id' => $book,
         ]);
 
         return $uploaded;

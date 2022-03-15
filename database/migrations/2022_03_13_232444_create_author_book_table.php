@@ -13,7 +13,7 @@ class CreateAuthorBooksTable extends Migration
      */
     public function up()
     {
-        Schema::create('author_books', function (Blueprint $table) {
+        Schema::create('author_book', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->foreignId('author_id')->constrained()->onDelete('cascade');
@@ -28,6 +28,6 @@ class CreateAuthorBooksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('author_books');
+        Schema::dropIfExists('author_book');
     }
 }

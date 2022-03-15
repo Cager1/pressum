@@ -14,7 +14,7 @@ use Venturecraft\Revisionable\RevisionableTrait;
  */
 class ResourceModel extends Model
 {
-    use Filterable, RevisionableTrait;
+    use Filterable;
 
     protected static $cannotUpdate = [];
     protected static $data = [];
@@ -154,10 +154,10 @@ class ResourceModel extends Model
 
     public static function checkPolicy($policyPermission, $model = null)
     {
-        if (Auth::user()->can($policyPermission, $model))
-            return true;
-
-        abort(403, 'You don\'t have permission to access this resource or action!'
-            . 'Required permission is ' . $policyPermission . ' ' . static::class);
+//        if (Auth::user()->can($policyPermission, $model))
+//            return true;
+//
+//        abort(403, 'You don\'t have permission to access this resource or action!'
+//            . 'Required permission is ' . $policyPermission . ' ' . static::class);
     }
 }
