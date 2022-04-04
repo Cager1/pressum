@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Models\ResourcePivot;
 
 class ResourceController extends Controller
 {
@@ -46,7 +47,7 @@ class ResourceController extends Controller
     public function indexRelation(Request $request, $id, $relation)
     {
         $item = $this->model::findOrFail($id);
-        $this->model::checkPolicy('view', $item);
+//        $this->model::checkPolicy('view', $item);
 
         $query = $item->$relation();
 

@@ -10,14 +10,14 @@ use Wildside\Userstamps\Userstamps;
 
 class ResourceFile extends ResourceModel
 {
-    use Userstamps, AttachesUuid;
+    use AttachesUuid;
 
     protected $table = 'files';
 
     protected $fillable = [
         'name', 'attributes',
         'filepath', 'folder',
-        'mimetype'
+        'mimetype', 'book_id'
     ];
 
     protected static function booted()
@@ -41,7 +41,7 @@ class ResourceFile extends ResourceModel
 
     public function getFileUrlAttribute()
     {
-        return URL::to('/files/' . $this->uuid);
+        return URL::to('/api/files/' . $this->uuid);
     }
 
     public function getFullPathAttribute()

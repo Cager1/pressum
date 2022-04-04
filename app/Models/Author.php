@@ -24,7 +24,7 @@ class Author extends ResourceModel
             'validation' => 'required|string',
         ],
         'orcid' => [
-            'validation' => 'required|string',
+            'validation' => 'string|nullable',
         ],
         'email' => [
             'validation' => 'required|string',

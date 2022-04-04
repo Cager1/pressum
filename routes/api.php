@@ -28,6 +28,8 @@ $resources = [
 
 ];
 
+Route::get('/booksRelations', [App\Http\Controllers\BookController::class, 'books']);
+
 // Files
 Route::post('/files', [App\Http\Controllers\FileController::class, 'upload']);
 Route::delete('/files/{resourceFile}', [App\Http\Controllers\FileController::class, 'destroy']);

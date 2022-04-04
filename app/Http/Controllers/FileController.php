@@ -12,7 +12,7 @@ class FileController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['saml'])->except(['show', 'uuidShow']);
+//        $this->middleware(['saml'])->except(['show', 'uuidShow']);
     }
 
     public function upload(Request $request)
