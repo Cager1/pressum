@@ -10,7 +10,7 @@ class Book extends ResourceModel
     use HasFactory;
 
     protected $fillable = [
-        'name', 'isbn',
+        'name', 'isbn', 'slug'
     ];
 
     protected static $data = [
@@ -19,8 +19,13 @@ class Book extends ResourceModel
         ],
         'isbn' => [
             'validation' => 'required|string',
-        ]
+        ],
+        'slug' => [
+            'validation' => 'nullable|string',
+        ],
     ];
+
+
 
     public function authors() {
         return $this->belongsToMany(Author::class);

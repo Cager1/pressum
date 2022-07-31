@@ -14,4 +14,9 @@ class BookController extends ResourceController
 
         return Book::all()->load('files','authors','sciences');
     }
+
+    public function getBookBySlug(Request $request, $slug)
+    {
+        return Book::where('slug', $slug)->firstOrFail()->load('files','authors','sciences');
+    }
 }
