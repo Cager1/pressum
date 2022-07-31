@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Venturecraft\Revisionable\RevisionableTrait;
 /**
  * @mixin IdeHelperResourceModel
@@ -46,10 +47,16 @@ class ResourceModel extends Model
     public static function manageResource(Request $request, $id = null, $save = true)
     {
         if ($id) {
+            if ($request->has('slug')) {
+                $request->merge(['slug' => Str::slug($request->name, '-')]);
+            }
             $validated = static::validateModel($request->all(), true);
             $model = static::findOrFail($id);
             $model->update($validated);
         } else {
+            if ($request->has('slug')) {
+                $request->merge(['slug' => Str::slug($request->name, '-')]);
+            }
             $validated = static::validateModel($request->all());
             $model = static::create($validated);
         }
