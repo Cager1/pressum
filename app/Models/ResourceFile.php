@@ -17,7 +17,8 @@ class ResourceFile extends ResourceModel
     protected $fillable = [
         'name', 'attributes',
         'filepath', 'folder',
-        'mimetype', 'book_id'
+        'mimetype', 'book_id',
+        'cut_version',
     ];
 
     protected static function booted()
@@ -30,11 +31,6 @@ class ResourceFile extends ResourceModel
 
         static::deleting(function ($model) {
         });
-    }
-
-    public function workshops()
-    {
-        return $this->hasMany(Workshop::class);
     }
 
     protected $appends = ['file_url'];

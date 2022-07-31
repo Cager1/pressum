@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Image;
+use setasign\Fpdi\Fpdi;
+
 
 class FileController extends Controller
 {
@@ -70,6 +72,33 @@ class FileController extends Controller
             $path = basename(Storage::disk($disk)->putFileAs($folder, $file, $filename));
         }
 
+        $cutPdf= null;
+        // If file is pdf, cut all but first page
+        if ($mimetype == 'application/pdf') {
+            $pdf = new Fpdi();
+            $pageCount = $pdf->setSourceFile(storage_path('app/books/' . $path));
+            if ($pageCount > 3) {
+                // Add first 3 pages to pdf
+                for ($i = 1; $i <= 3; $i++) {
+                    $tplId = $pdf->importPage($i);
+                    $size = $pdf->getTemplateSize($tplId);
+                    $pdf->AddPage($size['orientation'], $size);
+                    $pdf->useTemplate($tplId);
+                }
+            }
+            $filename = md5($file) . now()->timestamp . 'cut-version' . '.pdf';
+            $pdf->Output(storage_path('app/books/' . $filename), 'F');
+
+            $cutPdf = ResourceFile::create([
+                'name' => $name,
+                'filepath' => $path,
+                'mimetype' => $mimetype,
+                'folder' => $folder,
+                'book_id' => $book,
+                'cut_version' => true,
+            ]);
+        }
+
         if (!$name)
             $name = $filename;
 
@@ -81,6 +110,6 @@ class FileController extends Controller
             'book_id' => $book,
         ]);
 
-        return $uploaded;
+        return [$uploaded, $cutPdf];
     }
 }
