@@ -21,7 +21,7 @@ trait Filterable
             if (is_array($filterColumns)) {
                 foreach ($filterColumns as $key => $values) {
                     if (is_array($values)) {
-                        $query->whereHas($relation, function ($query2) use ($values, $relation) {
+                        $query->orWhereHas($relation, function ($query2) use ($values, $relation) {
                             $query2->filter($values, [], $relation);
                         });
                     } else {
@@ -37,16 +37,15 @@ trait Filterable
                             $parameter = [
                                 $key => $value
                             ];
-                            $query->whereHas($relation, function ($query2) use ($parameter, $relation) {
+                            $query->orWhereHas($relation, function ($query2) use ($parameter, $relation) {
                                 $query2->filter($parameter, [], $relation);
                             });
                         }
                     }
-
                 }
             }
         }
-        return $query;
+        return $filters;
     }
 
     public function scopeMagija($query, $column, $value, $relation = null)
