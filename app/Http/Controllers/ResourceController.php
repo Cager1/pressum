@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ResourceModel;
+use App\Traits\Filterable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use App\Models\ResourcePivot;
 
 class ResourceController extends Controller
 {
+    use Filterable;
     protected static $modelName;
     protected static $modelNamespace = 'App\\Models\\';
 
@@ -58,12 +60,12 @@ class ResourceController extends Controller
 
     public function indexReturn(Request $request, $query)
     {
-//        if ($this->hasTrait(Filterable::class)) {
-//            $query->filter($request->filter ?? [], $request->filterRelation ?? []);
-//        }
-
         if ($request->has('filter') || $request->has('filterRelation')) {
             $query->filter($request->filter ?? [], $request->filterRelation ?? []);
+        }
+
+        if ($request->has('column') || $request->has('value')|| $request->has('relation')) {
+            $this->scopeMagija($query, $request->column ?? null, $request->value ?? null, $request->relation ?? null);
         }
 
         $this->sortResource($request, $query);
@@ -154,7 +156,7 @@ class ResourceController extends Controller
 
 //            // Ako se radi o belongsToMany treba ovo da dohvati ispravan model
                 if (method_exists($relatedModel, $relValue) && method_exists($relatedModel->$relValue(), 'getPivotClass')) {
-                    $pivotClass = $relatedModel->$relValue()->getPivotClass();
+                    $pivotClass = $relatedModel->$relValue()->getModel(); //getPivotClass() ne radi za belongsToMany
                     $relationshipModel = new $pivotClass;
                 } else
                     $relationshipModel = $relationshipModel->$relValue()->getModel();
