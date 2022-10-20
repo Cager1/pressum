@@ -14,7 +14,7 @@ class AddToBooksTable extends Migration
     public function up()
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->string('slug');
+            $table->string('slug')->unique();
         });
     }
 

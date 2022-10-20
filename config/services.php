@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'eduid' => [
+        'client_id' => env('EDUID_CLIENT_ID'),
+        'client_secret' => env('EDUID_CLIENT_SECRET'),
+        'redirect' => '/oauth/callback',
+    ],
+
 ];

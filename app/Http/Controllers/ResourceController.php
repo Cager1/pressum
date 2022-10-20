@@ -183,7 +183,7 @@ class ResourceController extends Controller
 
         foreach ($sorts as $i => $sort) {
             $desc = filter_var($sortDesc[$i], FILTER_VALIDATE_BOOLEAN);
-            $query->orderBy($sort, $desc ? 'desc' : 'asc');
+                $query->orderBy($sort, $desc ? 'desc' : 'asc');
         }
     }
 

@@ -46,20 +46,26 @@ class ResourceModel extends Model
 
     public static function manageResource(Request $request, $id = null, $save = true)
     {
-        if ($id) {
-            if ($request->has('slug')) {
-                $request->merge(['slug' => Str::slug($request->name, '-')]);
+        if ($request->has('slug')) {
+            $slug = Str::slug($request->name, '-');
+            // check if slug already exists in books
+            $slugCount = Book::where('slug', $slug)->count();
+            if ($slugCount > 0) {
+                $slugCount += 1;
+                $slug .= '-' . $slugCount ;
             }
+            $request->merge(['slug' => $slug]);
+        }
+
+        if ($id) {
             $validated = static::validateModel($request->all(), true);
             $model = static::findOrFail($id);
             $model->update($validated);
         } else {
-            if ($request->has('slug')) {
-                $request->merge(['slug' => Str::slug($request->name, '-')]);
-            }
             $validated = static::validateModel($request->all());
             $model = static::create($validated);
         }
+
 
         if ($request->relations) {
             $relations = (array)$request->relations;
@@ -164,7 +170,10 @@ class ResourceModel extends Model
 //        if (Auth::user()->can($policyPermission, $model))
 //            return true;
 //
-//        abort(403, 'You don\'t have permission to access this resource or action!'
-//            . 'Required permission is ' . $policyPermission . ' ' . static::class);
+//        $gateResponse = Gate::inspect($policyPermission, $model);
+//        $policyDeniedMessage = $gateResponse->message() ?: 'You don\'t have permission to access this resource or action!'
+//            . 'Required permission is ' . $policyPermission . ' ' . static::class;
+//
+//        abort(403, $policyDeniedMessage);
     }
 }

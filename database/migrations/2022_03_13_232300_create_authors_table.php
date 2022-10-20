@@ -17,7 +17,7 @@ class CreateAuthorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('last_name');
-            $table->string('orchid')->nullable();
+            $table->string('orcid')->nullable()->unique();
             $table->string('email')->unique();
             $table->timestamps();
         });

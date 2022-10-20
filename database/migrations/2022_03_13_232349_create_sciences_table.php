@@ -15,7 +15,7 @@ class CreateSciencesTable extends Migration
     {
         Schema::create('sciences', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }

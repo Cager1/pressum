@@ -86,8 +86,9 @@ class FileController extends Controller
                     $pdf->useTemplate($tplId);
                 }
             }
-            $filename = md5($file) . now()->timestamp . 'cut-version' . '.pdf';
             $pdf->Output(storage_path('app/books/' . $filename), 'F');
+            $filename = md5($file) . now()->timestamp . 'cut-version' . '.pdf';
+
 
             $cutPdf = ResourceFile::create([
                 'name' => $name,

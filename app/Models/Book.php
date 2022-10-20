@@ -28,11 +28,11 @@ class Book extends ResourceModel
 
 
     public function authors() {
-        return $this->belongsToMany(Author::class);
+        return $this->belongsToMany(Author::class)->using(AuthorBook::class);
     }
 
     public function sciences() {
-        return $this->belongsToMany(Science::class);
+        return $this->belongsToMany(Science::class)->using(BookScience::class);
     }
 
     public function files() {

@@ -13,6 +13,9 @@ class ResourceFile extends ResourceModel
     use AttachesUuid;
 
     protected $table = 'files';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
 
     protected $fillable = [
         'name', 'attributes',

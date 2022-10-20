@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScienceController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +31,34 @@ $resources = [
 
 ];
 
+Route::get('getNumberOfBooksInSciences', [ScienceController::class, 'getScienceWithBooksCount']);
+
+// get all users
+Route::get('users', [UserController::class, 'index']);
+Route::get('usersLastSixMonths', [UserController::class, 'usersLastSixMonths']);
+Route::get('latestUsers', [UserController::class, 'usersLastTen']);
+Route::get('searchUsers/{user}', [UserController::class, 'search']);
+Route::put('updateUserRole', [UserController::class, 'updateRole']);
+Route::put('banUser', [UserController::class, 'ban']);
+
+// create author
+Route::post('createAuthor', [AuthorController::class, 'createAuthor']);
+// update author
+Route::put('updateAuthor/{id}', [AuthorController::class, 'updateAuthor']);
+// search author
+Route::get('searchAuthor/{author}', [AuthorController::class, 'searchAuthors']);
+// return all authors with their users
+Route::get('authorUsers', [AuthorController::class, 'allAuthors']);
+
+// get all roles
+Route::get('userRoles', [RoleController::class, 'userRoles']);
+// get all roles with user count
+Route::get('rolesWithUserCount', [RoleController::class, 'rolesWithUserCount']);
+
 Route::get('/booksRelations', [App\Http\Controllers\BookController::class, 'books']);
+Route::get('/booksLastSixMonths', [App\Http\Controllers\BookController::class, 'booksLastSixMonths']);
+Route::get('/latestBooks', [App\Http\Controllers\BookController::class, 'booksLastTen']);
+Route::get('/asd', [App\Http\Controllers\HealthController::class, 'hello']);
 Route::get('/booksBySlug/{slug}', [App\Http\Controllers\BookController::class, 'getBookBySlug']);
 // Files
 Route::post('/files', [App\Http\Controllers\FileController::class, 'upload']);

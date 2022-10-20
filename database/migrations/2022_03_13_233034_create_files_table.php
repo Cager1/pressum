@@ -14,10 +14,9 @@ class CreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('book_id')->nullable()->constrained()->onDelete('cascade');
+            $table->uuid('uuid')->index()->unique()->primary();
+            $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->string('folder');
-            $table->string('uuid');
             $table->string('name')->nullable();
             $table->string('filepath');
             $table->string('mimetype')->nullable();
