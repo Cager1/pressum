@@ -49,11 +49,18 @@ Route::put('updateAuthor/{id}', [AuthorController::class, 'updateAuthor']);
 Route::get('searchAuthor/{author}', [AuthorController::class, 'searchAuthors']);
 // return all authors with their users
 Route::get('authorUsers', [AuthorController::class, 'allAuthors']);
+// detach book form author
+Route::put('detachBook/{authorId}/{bookId}', [AuthorController::class, 'detachBook']);
 
+
+// get one role
+Route::get('getRole/{id}', [RoleController::class, 'getRole']);
 // get all roles
 Route::get('userRoles', [RoleController::class, 'userRoles']);
 // get all roles with user count
 Route::get('rolesWithUserCount', [RoleController::class, 'rolesWithUserCount']);
+// create new role
+Route::post('createRole', [RoleController::class, 'create'])->middleware('web');
 
 Route::get('/booksRelations', [App\Http\Controllers\BookController::class, 'books']);
 Route::get('/booksLastSixMonths', [App\Http\Controllers\BookController::class, 'booksLastSixMonths']);

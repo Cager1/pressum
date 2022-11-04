@@ -11,10 +11,12 @@ class Author extends ResourceModel
 {
     use HasFactory;
 
+    protected $model = 'author';
+
     protected $fillable = [
         'name',
         'last_name',
-        'orchid',
+        'orcid',
         'email',
         'created_by',
         'user_uid',
@@ -31,7 +33,7 @@ class Author extends ResourceModel
             'validation' => 'string|nullable|unique:authors,orcid',
         ],
         'email' => [
-            'validation' => 'required|string|unique:authors,email',
+            'validation' => 'required|email|unique:authors,email',
         ],
         'created_by' => [
             'validation' => 'required|string',

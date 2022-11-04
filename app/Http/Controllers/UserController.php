@@ -11,7 +11,7 @@ class UserController extends Controller
     // return all users that have no assigned author
     public function index()
     {
-        $users = User::doesntHave('author')->get();
+        $users = User::doesntHave('author')->where('role_id', '!=', 4)->get();
         return $users;
     }
 

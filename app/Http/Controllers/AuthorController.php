@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Http;
 
 class AuthorController extends ResourceController
 {
@@ -15,11 +17,21 @@ class AuthorController extends ResourceController
     // return authors with users
     public function allAuthors(Request $request)
     {
-        return Author::all()->load('user');
+        return Author::all()->load('user', 'books.files');
+    }
+
+    // detach book from author
+    public function detachBook(Request $request, $authorId, $bookId)
+    {
+        $author = Author::find($authorId);
+        $book = Book::find($bookId);
+        $author->books()->detach($book);
+        return $author->load('books.files', 'user');
     }
 
     public function createAuthor(Request $request)
     {
+
         $this->validate($request, [
             'name' => 'required|string',
             'last_name' => 'required|string',
@@ -49,10 +61,10 @@ class AuthorController extends ResourceController
         $author = Author::findOrFail($id);
 
         $request->validate([
-        'name' => 'required|string',
-        'last_name' => 'required|string',
+        'name' => '|string',
+        'last_name' => '|string',
         'orcid' => 'string|nullable|unique:authors,orcid',
-        'email' => 'required|string|unique:authors,email',
+        'email' => '|string|unique:authors,email',
         'user_uid' => 'string|nullable|unique:authors,user_uid',
         ]);
 
@@ -64,9 +76,13 @@ class AuthorController extends ResourceController
         }
 
         if ($author->update($request->all())) {
-            return response()->json(['message' => 'Autor uspjesno izmjenjen.'], 201);
+            return $author;
         } else {
-            return response()->json(['message' => 'Došlo je do pogreške kod izmjene autora.'], 400);
+            return response()->json(
+                ['message' => 'Došlo je do pogreške kod izmjene autora.',
+                    'error' => $author
+                ],
+                400);
         }
     }
 }
