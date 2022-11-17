@@ -24,19 +24,19 @@ class Author extends ResourceModel
 
     protected static $data = [
         'name' => [
-            'validation' => 'required|string',
+            'validation' => 'string',
         ],
         'last_name' => [
-            'validation' => 'required|string',
+            'validation' => 'string',
         ],
         'orcid' => [
             'validation' => 'string|nullable|unique:authors,orcid',
         ],
         'email' => [
-            'validation' => 'required|email|unique:authors,email',
+            'validation' => 'email|unique:authors,email',
         ],
         'created_by' => [
-            'validation' => 'required|string',
+            'validation' => 'string',
         ],
         'user_uid' => [
             'validation' => 'string|nullable',

@@ -86,6 +86,9 @@ class OAuthController extends Controller
 
     public function logout(Request $request)
     {
+        // get cookie from request
+        $cookie = $request->cookie('pressum_session');
+        error_log($cookie);
         Auth::logout();
         Session::save();
 

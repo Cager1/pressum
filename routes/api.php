@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScienceController;
 use App\Http\Controllers\UserController;
@@ -28,6 +29,7 @@ $resources = [
     'books' => BookController::class,
     'authors' => AuthorController::class,
     'sciences' => ScienceController::class,
+    'permissions' => PermissionController::class,
 
 ];
 
@@ -60,7 +62,7 @@ Route::get('userRoles', [RoleController::class, 'userRoles']);
 // get all roles with user count
 Route::get('rolesWithUserCount', [RoleController::class, 'rolesWithUserCount']);
 // create new role
-Route::post('createRole', [RoleController::class, 'create'])->middleware('web');
+Route::post('createRole', [RoleController::class, 'create']);
 
 Route::get('/booksRelations', [App\Http\Controllers\BookController::class, 'books']);
 Route::get('/booksLastSixMonths', [App\Http\Controllers\BookController::class, 'booksLastSixMonths']);

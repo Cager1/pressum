@@ -18,4 +18,10 @@ class Role extends ResourceModel
     {
         return $this->hasMany(User::class);
     }
+
+    // has many permissions
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
 }
