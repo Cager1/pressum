@@ -17,13 +17,11 @@ class AuthorController extends ResourceController
     protected static $modelName = 'Author';
 
     protected static $middlewareCustom = ['auth:sanctum'];
-    protected static $middlewareExcept = ['index', 'show', 'create', 'allAuthors'];
+    protected static $middlewareExcept = ['index', 'show', 'allAuthors'];
     // return authors with users
     public function allAuthors(Request $request)
     {
-
         return Author::all()->load('user', 'books.files');
-
     }
 
     // detach book from author

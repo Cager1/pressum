@@ -167,13 +167,13 @@ class ResourceModel extends Model
 
     public static function checkPolicy($policyPermission, $model = null)
     {
-//        if (Auth::user()->can($policyPermission, $model))
-//            return true;
-//
-//        $gateResponse = Gate::inspect($policyPermission, $model);
-//        $policyDeniedMessage = $gateResponse->message() ?: 'You don\'t have permission to access this resource or action!'
-//            . 'Required permission is ' . $policyPermission . ' ' . static::class;
-//
-//        abort(403, $policyDeniedMessage);
+        if (Auth::user()->can($policyPermission, $model))
+            return true;
+
+        $gateResponse = Gate::inspect($policyPermission, $model);
+        $policyDeniedMessage = $gateResponse->message() ?: 'You don\'t have permission to access this resource or action!'
+            . 'Required permission is ' . $policyPermission . ' ' . static::class;
+
+        abort(403, $policyDeniedMessage);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Role;
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RolePolicy
+class BookPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +18,19 @@ class RolePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Role $role)
+    public function view(User $user, Book $book)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,42 +41,54 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        // check if user role has permission to create role and if user is admin
-        return $user->role->permissions->contains('name', 'create_role');
+        // check if user role has permission to create book
+        return $user->role->permissions->contains('name', 'create_book');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Role $role)
+    public function update(User $user, Book $book)
     {
-        return $user->role->permissions->contains('name', 'update_role');
+        // check if user role has permission for all
+        if ($user->role->permissions->contains('name', 'all')) {
+            return true;
+        } else {
+            // check if user role has permission to update book and if user is the owner
+            return $user->role->permissions->contains('name', 'update_book') && $user->id == $book->user_id;
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Role $role)
+    public function delete(User $user, Book $book)
     {
-        return $user->role->permissions->contains('name', 'delete_role');
+        // check if user role has permission for all
+        if ($user->role->permissions->contains('name', 'all')) {
+            return true;
+        } else {
+            // check if user role has permission to delete book and if user is the owner
+            return $user->role->permissions->contains('name', 'delete_book') && $user->id == $book->user_id;
+        }
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Role $role)
+    public function restore(User $user, Book $book)
     {
         //
     }
@@ -85,10 +97,10 @@ class RolePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Role $role)
+    public function forceDelete(User $user, Book $book)
     {
         //
     }

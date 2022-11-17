@@ -10,6 +10,9 @@ class BookController extends ResourceController
 {
     protected static $modelName = 'Book';
 
+    protected static $middlewareCustom = ['auth:sanctum'];
+    protected static $middlewareExcept = ['index', 'show',];
+
     public function books(Request $request)
     {
 

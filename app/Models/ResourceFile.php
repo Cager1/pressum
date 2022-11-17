@@ -57,4 +57,8 @@ class ResourceFile extends ResourceModel
     public function getResponse() {
         return Storage::response($this->full_path, $this->name);
     }
+
+    public function book() {
+        return $this->belongsTo(Book::class);
+    }
 }

@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class RoleController extends Controller
 {
+   // constructor
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
 
     // get all user roles
     public function userRoles()
@@ -31,8 +37,7 @@ class RoleController extends Controller
     // Create new role
     public function create(Request $request)
     {
-        $userrr = $user_socialite = Socialite::driver('eduid')->stateless()->user();
-        if ($request->user()->can('create', Role::class)) {
+        if (Auth::user()->can('create', Role::class)) {
             $role = Role::create($request->all());
             return response()->json($role);
         } else {

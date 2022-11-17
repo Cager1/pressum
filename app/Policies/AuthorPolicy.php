@@ -18,7 +18,7 @@ class AuthorPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return false;
     }
 
     /**
@@ -54,8 +54,13 @@ class AuthorPolicy
      */
     public function update(User $user, Author $author)
     {
-        // check if user role has permission to update author
-        return $user->role->permissions->contains('name', 'update_author');
+        // check if user role has permission for all
+        if ($user->role->permissions->contains('name', 'all')) {
+            return true;
+        } else {
+            // check if user role has permission to update author and if author is created by user
+            return $user->role->permissions->contains('name', 'update_author') && $author->user_id == $user->id;
+        }
     }
 
     /**
@@ -67,8 +72,13 @@ class AuthorPolicy
      */
     public function delete(User $user, Author $author)
     {
-        // check if user role has permission to delete author
-        return $user->role->permissions->contains('name', 'delete_author');
+        // check if user role has permission for all
+        if ($user->role->permissions->contains('name', 'all')) {
+            return true;
+        } else {
+            // check if user role has permission to delete author and if author is created by user
+            return $user->role->permissions->contains('name', 'delete_author') && $author->user_id == $user->id;
+        }
     }
 
     /**
