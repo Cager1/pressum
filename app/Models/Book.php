@@ -10,7 +10,7 @@ class Book extends ResourceModel
     use HasFactory;
 
     protected $fillable = [
-        'name', 'isbn', 'slug'
+        'name', 'isbn', 'slug', 'created_by',
     ];
 
     protected static $data = [
@@ -21,6 +21,9 @@ class Book extends ResourceModel
             'validation' => 'required|string',
         ],
         'slug' => [
+            'validation' => 'nullable|string',
+        ],
+        'created_by' => [
             'validation' => 'nullable|string',
         ],
     ];
@@ -38,5 +41,16 @@ class Book extends ResourceModel
     public function files() {
         return $this->hasMany(ResourceFile::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'uid');
+    }
+
+    public function purchases()
+    {
+        return $this->belongsToMany(User::class, 'purchases')->using(Purchase::class);
+    }
+
 
 }

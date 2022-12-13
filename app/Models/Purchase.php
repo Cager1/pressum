@@ -5,15 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PermissionRole extends ResourcePivot
+class Purchase extends ResourcePivot
 {
     use HasFactory;
 
-    protected $table = 'permission_role';
-
     protected $fillable = [
-        'permission_id',
-        'role_id',
+        'book_id', 'author_id',
     ];
-
 }

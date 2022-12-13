@@ -42,20 +42,11 @@ class ResourceModel extends Model
 
     public static function index(Request $request, &$query)
     {
+
     }
 
     public static function manageResource(Request $request, $id = null, $save = true)
     {
-        if ($request->has('slug')) {
-            $slug = Str::slug($request->name, '-');
-            // check if slug already exists in books
-            $slugCount = Book::where('slug', $slug)->count();
-            if ($slugCount > 0) {
-                $slugCount += 1;
-                $slug .= '-' . $slugCount ;
-            }
-            $request->merge(['slug' => $slug]);
-        }
 
         if ($id) {
             $validated = static::validateModel($request->all(), true);
@@ -167,13 +158,15 @@ class ResourceModel extends Model
 
     public static function checkPolicy($policyPermission, $model = null)
     {
-        if (Auth::user()->can($policyPermission, $model))
-            return true;
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
+            if ($user->can($policyPermission, $model))
+                return true;
+            $policyDeniedMessage = 'You don\'t have permission to access this resource or action!';
+            abort(403, $policyDeniedMessage);
+        } else {
+            abort(401, 'You are not authorized to access this resource or action!');
+        }
 
-        $gateResponse = Gate::inspect($policyPermission, $model);
-        $policyDeniedMessage = $gateResponse->message() ?: 'You don\'t have permission to access this resource or action!'
-            . 'Required permission is ' . $policyPermission . ' ' . static::class;
-
-        abort(403, $policyDeniedMessage);
     }
 }

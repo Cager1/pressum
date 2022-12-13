@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Book;
+use App\Models\BookScience;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class BookPolicy
+class BookSciencePolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class BookPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\BookScience  $bookScience
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Book $book)
+    public function view(User $user, BookScience $bookScience)
     {
         return true;
     }
@@ -41,57 +41,54 @@ class BookPolicy
      */
     public function create(User $user)
     {
-        // user role permission has create_book
-        return $user->role->permissions->contains('name', 'create_book');
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\BookScience  $bookScience
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Book $book)
+    public function update(User $user, BookScience $bookScience)
     {
-        // check if user role has permission for all
-        if ($user->role->permissions->contains('name', 'all')) {
-            return true;
-        } else {
-            // check if user role has permission to update book and if user is the owner
-            return $user->role->permissions->contains('name', 'update_book') && $user->uid == $book->created_by;
-        }
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\BookScience  $bookScience
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Book $book)
+    public function delete(User $user, BookScience $bookScience)
     {
-        // check if user role has permission for all
-        if ($user->role->permissions->contains('name', 'all')) {
-            return true;
-        } else {
-            // check if user role has permission to delete book or if user is the owner
-            return $user->role->permissions->contains('name', 'delete_book') && $user->uid === $book->created_by;
-        }
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\BookScience  $bookScience
      * @return \Illuminate\Auth\Access\Response|bool
      */
-
-    public function purchase(User $user, Book $book)
+    public function restore(User $user, BookScience $bookScience)
     {
-        // if book is not public
-        return true;
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\BookScience  $bookScience
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function forceDelete(User $user, BookScience $bookScience)
+    {
+        //
     }
 }

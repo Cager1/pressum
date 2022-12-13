@@ -58,6 +58,10 @@ class PermissionRoleSeeder extends Seeder
                 'name' => 'delete_book',
                 'description' => 'Delete Book',
             ],
+            [
+                'name' => 'detach_book',
+                'description' => 'Detach Book from author',
+            ],
             // roles
             [
                 'name' => 'create_role',
@@ -74,6 +78,10 @@ class PermissionRoleSeeder extends Seeder
 
             // permissions
             [
+                'name' => 'view_permission',
+                'description' => 'View Permission',
+            ],
+            [
                 'name' => 'create_permission',
                 'description' => 'Create Permission',
             ],
@@ -84,6 +92,65 @@ class PermissionRoleSeeder extends Seeder
             [
                 'name' => 'delete_permission',
                 'description' => 'Delete Permission',
+            ],
+            // permission_role
+            [
+                'name' => 'view_permission_role',
+                'description' => 'View Permission Role',
+            ],
+            [
+                'name' => 'create_permission_role',
+                'description' => 'Create Permission Role',
+            ],
+            [
+                'name' => 'update_permission_role',
+                'description' => 'Update Permission Role',
+            ],
+            [
+                'name' => 'delete_permission_role',
+                'description' => 'Delete Permission Role',
+            ],
+            // science
+            [
+                'name' => 'create_science',
+                'description' => 'Create Science',
+            ],
+            [
+                'name' => 'update_science',
+                'description' => 'Update Science',
+            ],
+            [
+                'name' => 'delete_science',
+                'description' => 'Delete Science',
+            ],
+            // users
+
+            [
+                'name' => 'view_user',
+                'description' => 'View User',
+            ],
+
+            [
+                'name' => 'update_user',
+                'description' => 'Update User',
+            ],
+
+            // permission for files
+            [
+                'name' => 'create_file',
+                'description' => 'Create File',
+            ],
+            [
+                'name' => 'update_file',
+                'description' => 'Update File',
+            ],
+            [
+                'name' => 'delete_file',
+                'description' => 'Delete File',
+            ],
+            [
+                'name' => 'view_file',
+                'description' => 'View File',
             ],
             // permission for all
             [
@@ -106,11 +173,29 @@ class PermissionRoleSeeder extends Seeder
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_book')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'detach_book')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_role')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_role')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_role')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_science')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_science')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_science')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_file')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_file')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_file')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'view_file')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'view_user')->first());
+
+
+
 
         $role = \App\Models\Role::where('name', 'Autor')->first();
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_book')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_file')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_author')->first());
+
 
     }
 }

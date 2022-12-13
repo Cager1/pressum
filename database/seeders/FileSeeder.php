@@ -25,6 +25,7 @@ class FileSeeder extends Seeder
                 'folder' => 'images',
                 'name' => $number.'.png',
                 'filepath' => $number.'.png',
+                'mimetype' => 'image/png',
             ]);
         }
     }

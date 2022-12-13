@@ -18,6 +18,8 @@ class AuthorController extends ResourceController
 
     protected static $middlewareCustom = ['auth:sanctum'];
     protected static $middlewareExcept = ['index', 'show', 'allAuthors'];
+
+
     // return authors with users
     public function allAuthors(Request $request)
     {
@@ -29,42 +31,31 @@ class AuthorController extends ResourceController
     {
         $author = Author::find($authorId);
         $book = Book::find($bookId);
-        $author->books()->detach($book);
-        return $author->load('books.files', 'user');
+        if (Auth::user()->can('detachBook', [Author::class, $author, $book])) {
+            $author->books()->detach($book);
+            return response()->json(['message' => 'Book detached from author.'], 200);
+        } else {
+            return response()->json(['message' => 'You are not authorized to detach book from author.'], 403);
+        }
     }
 
-
-
-    // update author
-    public function updateAuthor(Request $request, $id)
+    // store author
+    public function store(Request $request)
     {
-        $author = Author::findOrFail($id);
-
-        // log pressum_session cookie
-
-        $request->validate([
-        'name' => '|string',
-        'last_name' => '|string',
-        'orcid' => 'string|nullable|unique:authors,orcid',
-        'email' => '|string|unique:authors,email',
-        'user_uid' => 'string|nullable|unique:authors,user_uid',
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'orcid' => 'required|string',
+            'email' => 'required|string|email',
         ]);
 
-        if ($request->user_uid) {
-            $user = User::where('uid', $request->user_uid)->first();
-            if ($user->role->name === 'Korisnik') {
-                response()->json([ 'message' => 'Korisnik mora imati ulogu autora kako bi mu se dodjelio autor.' ], 401);
-            }
-        }
-
-        if ($author->update($request->all())) {
-            return $author;
-        } else {
-            return response()->json(
-                ['message' => 'Došlo je do pogreške kod izmjene autora.',
-                    'error' => $author
-                ],
-                400);
-        }
+        $author = Author::create([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'orcid' => $request->orcid,
+            'email' => $request->email,
+            'created_by' => Auth::user()->uid,
+        ]);
+        return $author;
     }
 }

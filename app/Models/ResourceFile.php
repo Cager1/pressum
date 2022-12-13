@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Traits\AttachesUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Wildside\Userstamps\Userstamps;
@@ -37,6 +39,12 @@ class ResourceFile extends ResourceModel
     }
 
     protected $appends = ['file_url'];
+
+    public static function index(Request $request, &$query)
+    {
+        // return all images
+        $query->where('mimetype', 'like', 'image/%');
+    }
 
     public function getFileUrlAttribute()
     {

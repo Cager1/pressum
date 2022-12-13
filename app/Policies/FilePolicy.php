@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\ResourceFile;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Str;
 
 class FilePolicy
 {
@@ -35,8 +36,10 @@ class FilePolicy
         // If user role has permission for all
         // If file is image, allow.
         // If file is pdf, allow if file is cut version else check if user has permission or if he owns it
-
-        return $resourceFile->mimetype.contains('image') || $resourceFile->cut_version || $user->role->permissions->contains('name', 'view_file') || $user->uid == $resourceFile->book->user_uid;
+        // If user purchased the file, allow
+        return Str::contains($resourceFile->mimetype, 'image') || $resourceFile->cut_version
+            || $user->role->permissions->contains('name', 'view_file') || $user->purchases->contains('id', $resourceFile->book->id)
+            || $user->uid == $resourceFile->book->created_by;
     }
 
     /**

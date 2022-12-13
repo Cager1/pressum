@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Str;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,6 +45,8 @@ class OAuthController extends Controller
                 $laravelUser = User::where('uid', $user_socialite->user['data']['uid'])
                     ->whereBranch($user_socialite->user['data']['branch'])
                     ->first();
+                // find Korisnik role
+                $role = Role::where('name', 'Korisnik')->first();
                 if (!$laravelUser)
                     $laravelUser = User::create([
                         'uid' => $user_socialite->user['data']['uid'],
@@ -52,7 +55,7 @@ class OAuthController extends Controller
                         'last_name' => $user_socialite->user['data']['last_name'],
                         'email' => $user_socialite->user['data']['email'],
                         'name' => $user_socialite->user['data']['first_name'] . ' ' . $user_socialite->user['data']['last_name'],
-                        'role_id' => 4,
+                        'role_id' => $role->id,
                         'password' => "",
                     ]);
                 else
@@ -68,6 +71,7 @@ class OAuthController extends Controller
 
         Auth::login($laravelUser);
 
+        error_log("User logged in: " . $laravelUser->name);
         Log::info('User logged: ' . $laravelUser->uid);
         $intended_url = Session::get('url.intended', null);
 
@@ -81,7 +85,7 @@ class OAuthController extends Controller
 
     public function getUser(Request $request)
     {
-        return auth()->user();
+        return auth()->user()->load('role', 'books.files');
     }
 
     public function logout(Request $request)

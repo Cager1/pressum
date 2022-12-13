@@ -20,7 +20,7 @@ class AuthorBookSeeder extends Seeder
             $number = $faker->numberBetween(1, 4);
             for ($i = 0; $i < $number; $i++) {
                 \App\Models\AuthorBook::create([
-                    'author_id' => $faker->numberBetween(6, 22),
+                    'author_id' => $faker->numberBetween(1, 100),
                     'book_id' => $book->id,
                 ]);
             }

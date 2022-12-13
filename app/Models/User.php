@@ -55,4 +55,15 @@ class User extends Authenticatable
     {
             return $this->hasOne(Author::class, 'user_uid', 'uid');
     }
+
+    // has many books
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'created_by', 'uid');
+    }
+
+    public function purchases()
+    {
+        return $this->belongsToMany(Book::class, 'purchases');
+    }
 }

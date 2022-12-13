@@ -46,14 +46,17 @@ Route::put('banUser', [UserController::class, 'ban']);
 // create author
 Route::post('createAuthor', [AuthorController::class, 'createAuthor']);
 // update author
-Route::put('updateAuthor/{id}', [AuthorController::class, 'updateAuthor']);
+Route::put('updateAuthor/{id}', [AuthorController::class, 'updateAuthor'])->middleware('is.author');
 // search author
 Route::get('searchAuthor/{author}', [AuthorController::class, 'searchAuthors']);
 // return all authors with their users
 Route::get('authorUsers', [AuthorController::class, 'allAuthors']);
 // detach book form author
 Route::put('detachBook/{authorId}/{bookId}', [AuthorController::class, 'detachBook']);
-
+// detach book from user
+Route::put('detachBookFromUser/{userUID}/{bookID}', [UserController::class, 'detachBook']);
+// purchase book
+Route::post('books/purchase/{book_id}', [BookController::class, 'purchase']);
 
 // get one role
 Route::get('getRole/{id}', [RoleController::class, 'getRole']);
