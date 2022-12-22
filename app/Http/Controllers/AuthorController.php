@@ -33,7 +33,7 @@ class AuthorController extends ResourceController
         $book = Book::find($bookId);
         if (Auth::user()->can('detachBook', [Author::class, $author, $book])) {
             $author->books()->detach($book);
-            return response()->json(['message' => 'Book detached from author.'], 200);
+            return $author->load('user', 'books.files');
         } else {
             return response()->json(['message' => 'You are not authorized to detach book from author.'], 403);
         }

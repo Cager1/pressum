@@ -7,14 +7,15 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 
 class BookController extends ResourceController
 {
     protected static $modelName = 'Book';
 
-    protected static $middlewareCustom = ['auth:sanctum'];
-    protected static $middlewareExcept = ['index', 'show','getBookBySlug'];
+//    protected static $middlewareCustom = ['auth:sanctum'];
+//    protected static $middlewareExcept = ['index', 'show','getBookBySlug'];
 
     public function books(Request $request)
     {
@@ -22,7 +23,8 @@ class BookController extends ResourceController
         return Book::all()->load('files','authors','sciences');
     }
 
-    // Get books from last 6 months
+
+    // Get books frphom last 6 months
     public function booksLastSixMonths(Request $request)
     {
         return Book::selectRaw('COUNT(*) as count, YEAR(created_at) year, MONTH(created_at) month')
@@ -90,7 +92,7 @@ class BookController extends ResourceController
             $book->sciences()->sync($request->sciences);
         }
         if ($request->authors) {
-            $book->authors()->attach($request->authors);
+            $book->authors()->sync($request->authors);
         }
         return $book->load('authors','sciences');
     }
@@ -106,6 +108,7 @@ class BookController extends ResourceController
             $slug .= '-' . $slugCount ;
         }
 
+
         $book = Book::findOrFail($id);
 
         $book->update([
@@ -113,6 +116,16 @@ class BookController extends ResourceController
             'isbn' => $request->isbn,
             'slug' => $slug,
         ]);
+
+        // sync sciences
+        if ($request->sciences) {
+            $book->sciences()->sync($request->sciences);
+        }
+//
+        // sync authors
+        if ($request->authors) {
+            $book->authors()->sync($request->authors);
+        }
 
         return $book->load('authors','sciences');
     }

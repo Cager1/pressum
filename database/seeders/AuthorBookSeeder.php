@@ -19,8 +19,9 @@ class AuthorBookSeeder extends Seeder
         foreach ($books as $book) {
             $number = $faker->numberBetween(1, 4);
             for ($i = 0; $i < $number; $i++) {
+                $n = $faker->numberBetween(0, $authors->count() - 1);
                 \App\Models\AuthorBook::create([
-                    'author_id' => $faker->numberBetween(1, 100),
+                    'author_id' => $authors[$n]->id,
                     'book_id' => $book->id,
                 ]);
             }

@@ -36,126 +36,127 @@ class PermissionRoleSeeder extends Seeder
         $permissions = [
             [
                 'name' => 'create_author',
-                'description' => 'Create Author',
+                'description' => 'Stvaranje autora',
             ],
             [
                 'name' => 'update_author',
-                'description' => 'Update Author',
+                'description' => 'Ažuriranje svih autora',
             ],
             [
                 'name' => 'delete_author',
-                'description' => 'Delete Author',
+                'description' => 'Brisanje svih autora',
             ],
+            // Books
             [
                 'name' => 'create_book',
-                'description' => 'Create Book',
+                'description' => 'Stvaranje knjige',
             ],
             [
                 'name' => 'update_book',
-                'description' => 'Update Book',
+                'description' => 'Ažuriranje svih knjiga',
             ],
             [
                 'name' => 'delete_book',
-                'description' => 'Delete Book',
+                'description' => 'Brisanje svih knjiga',
             ],
             [
                 'name' => 'detach_book',
-                'description' => 'Detach Book from author',
+                'description' => 'Uklanjanje autora iz knjige',
             ],
             // roles
             [
                 'name' => 'create_role',
-                'description' => 'Create Role',
+                'description' => 'Stvaranje uloge',
             ],
             [
                 'name' => 'update_role',
-                'description' => 'Update Role',
+                'description' => 'Ažuriranje svih uloga',
             ],
             [
                 'name' => 'delete_role',
-                'description' => 'Delete Role',
+                'description' => 'Brisanje svih uloga',
             ],
 
             // permissions
             [
                 'name' => 'view_permission',
-                'description' => 'View Permission',
+                'description' => 'Pregled svih dozvola',
             ],
             [
                 'name' => 'create_permission',
-                'description' => 'Create Permission',
+                'description' => 'Stvaranje dozvole',
             ],
             [
                 'name' => 'update_permission',
-                'description' => 'Update Permission',
+                'description' => 'Ažuriranje svih dozvola',
             ],
             [
                 'name' => 'delete_permission',
-                'description' => 'Delete Permission',
+                'description' => 'Brisanje svih dozvola',
             ],
             // permission_role
             [
                 'name' => 'view_permission_role',
-                'description' => 'View Permission Role',
+                'description' => 'Pregled svih dozvola za uloge',
             ],
             [
                 'name' => 'create_permission_role',
-                'description' => 'Create Permission Role',
+                'description' => 'Stvaranje dozvole za ulogu',
             ],
             [
                 'name' => 'update_permission_role',
-                'description' => 'Update Permission Role',
+                'description' => 'Ažuriranje svih dozvola za uloge',
             ],
             [
                 'name' => 'delete_permission_role',
-                'description' => 'Delete Permission Role',
+                'description' => 'Brisanje svih dozvola za uloge',
             ],
             // science
             [
                 'name' => 'create_science',
-                'description' => 'Create Science',
+                'description' => 'Stvaranje znanosti',
             ],
             [
                 'name' => 'update_science',
-                'description' => 'Update Science',
+                'description' => 'Ažuriranje svih znanosti',
             ],
             [
                 'name' => 'delete_science',
-                'description' => 'Delete Science',
+                'description' => 'Brisanje svih znanosti',
             ],
             // users
 
             [
                 'name' => 'view_user',
-                'description' => 'View User',
+                'description' => 'Pregled svih korisnika',
             ],
 
             [
                 'name' => 'update_user',
-                'description' => 'Update User',
+                'description' => 'Ažuriranje svih korisnika',
             ],
 
             // permission for files
             [
                 'name' => 'create_file',
-                'description' => 'Create File',
+                'description' => 'Stvaranje datoteke',
             ],
             [
                 'name' => 'update_file',
-                'description' => 'Update File',
+                'description' => 'Ažuriranje svih datoteka',
             ],
             [
                 'name' => 'delete_file',
-                'description' => 'Delete File',
+                'description' => 'Brisanje svih datoteka',
             ],
             [
                 'name' => 'view_file',
-                'description' => 'View File',
+                'description' => 'Pregled svih datoteka',
             ],
             // permission for all
             [
                 'name' => 'all',
-                'description' => 'All Permissions',
+                'description' => 'Sve dozvole',
             ],
         ];
         foreach ($permissions as $permission) {
@@ -167,22 +168,33 @@ class PermissionRoleSeeder extends Seeder
         $role->permissions()->attach(\App\Models\Permission::all());
 
         $role = \App\Models\Role::where('name', 'Admin')->first();
-        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_author')->first());
-        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_author')->first());
-        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_author')->first());
+        // book
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'detach_book')->first());
+
+        // author
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'create_author')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_author')->first());
+        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_author')->first());
+
+        // role
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_role')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_role')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_role')->first());
+
+        // science
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_science')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_science')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_science')->first());
+
+        // file
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_file')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'update_file')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_file')->first());
+
+        // user
         $role->permissions()->attach(\App\Models\Permission::where('name', 'view_file')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'view_user')->first());
 
@@ -191,8 +203,6 @@ class PermissionRoleSeeder extends Seeder
 
         $role = \App\Models\Role::where('name', 'Autor')->first();
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_book')->first());
-        $role->permissions()->attach(\App\Models\Permission::where('name', 'update_book')->first());
-        $role->permissions()->attach(\App\Models\Permission::where('name', 'delete_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_file')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_author')->first());
 

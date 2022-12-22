@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class CheckIfUserIsAuthor
     {
         if ($request->user_uid) {
             $user = User::where('uid', $request->user_uid)->first();
-            if ($user->role->name !== 'Super Admin' && $user->role->name !== 'Admin' && $user->role->name !== 'Autor') {
+            if ($user->role->name === 'Korisnik') {
                 response()->json([ 'message' => 'Korisnik nije autor.' ], 422);
             }
             return $next($request);

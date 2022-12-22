@@ -65,7 +65,7 @@ class AuthorBookPolicy
      */
     public function delete(User $user, AuthorBook $authorBook)
     {
-        //
+        return true;
     }
 
     /**

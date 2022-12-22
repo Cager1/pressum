@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScienceController;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -75,7 +76,6 @@ Route::get('/booksBySlug/{slug}', [App\Http\Controllers\BookController::class, '
 Route::post('/files', [App\Http\Controllers\FileController::class, 'upload']);
 Route::delete('/files/{resourceFile}', [App\Http\Controllers\FileController::class, 'destroy']);
 Route::get('/files/{uuid}', [App\Http\Controllers\FileController::class, 'uuidShow']);
-
 foreach ($resources as $resource => $controller) {
     Route::get($resource . '/form', $controller . '@getFormData');
     Route::get($resource . '/{id}/{relation}', $controller . '@indexRelation');
@@ -86,3 +86,8 @@ foreach ($resources as $resource => $controller) {
 Route::apiResources(
     $resources
 );
+
+
+
+// temporary login
+Route::get('login/{uid}', [OAuthController::class, 'login']);

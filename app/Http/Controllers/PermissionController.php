@@ -31,4 +31,26 @@ class PermissionController extends ResourceController
 
         return response()->json($permission);
     }
+
+    // update Permission
+    public function update(Request $request, $id)
+    {
+        // validate
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
+        $permission = Permission::findOrFail($id);
+        $permission->update($request->all());
+
+        // check if any role has "all" permission
+        $roles = Role::permissions('all')->get();
+        $permissions = Permission::all();
+        // give this permission to all roles that have "all" permission
+        foreach ($roles as $role) {
+            $role->permissions()->sync($permissions);
+        }
+
+        return response()->json($permission);
+    }
 }

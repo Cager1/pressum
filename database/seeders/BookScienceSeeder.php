@@ -15,12 +15,14 @@ class BookScienceSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $books = \App\Models\Book::all();
+        $sciences = \App\Models\Science::all();
         foreach ($books as $book) {
             $number = $faker->numberBetween(1, 4);
             for ($i = 0; $i < $number; $i++) {
+                $n = $faker->numberBetween(0, $sciences->count() - 1);
                 \App\Models\BookScience::create([
                     'book_id' => $book->id,
-                    'science_id' => $faker->numberBetween(6, 26),
+                    'science_id' => $sciences[$n]->id,
                 ]);
             }
         }

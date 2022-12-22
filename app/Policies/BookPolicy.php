@@ -54,13 +54,8 @@ class BookPolicy
      */
     public function update(User $user, Book $book)
     {
-        // check if user role has permission for all
-        if ($user->role->permissions->contains('name', 'all')) {
-            return true;
-        } else {
-            // check if user role has permission to update book and if user is the owner
-            return $user->role->permissions->contains('name', 'update_book') && $user->uid == $book->created_by;
-        }
+        // check if user role has permission to update book and if user is the owner
+        return $user->role->permissions->contains('name', 'update_book') || $user->uid == $book->created_by;
     }
 
     /**
@@ -72,13 +67,9 @@ class BookPolicy
      */
     public function delete(User $user, Book $book)
     {
-        // check if user role has permission for all
-        if ($user->role->permissions->contains('name', 'all')) {
-            return true;
-        } else {
-            // check if user role has permission to delete book or if user is the owner
-            return $user->role->permissions->contains('name', 'delete_book') && $user->uid === $book->created_by;
-        }
+
+        // check if user role has permission to delete book or if user is the owner
+        return $user->role->permissions->contains('name', 'delete_book') || $user->uid === $book->created_by;
     }
 
     /**

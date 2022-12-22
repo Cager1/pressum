@@ -55,11 +55,15 @@ class AuthorPolicy
      */
     public function update(User $user, Author $author)
     {
+        // if user contains permission to update author
         if ($user->role->permissions->contains('name', 'update_author')) {
             return true;
         } else {
+            // else if author has user attached
             if ($author->user_uid !== null) {
+                // if true check if user is the owner
                 return $author->user_uid == $user->uid;
+            // else if author is creatred by user
             } else return $author->created_by == $user->uid;
         }
     }
@@ -85,6 +89,8 @@ class AuthorPolicy
   // Determine whether the user can detach a book
     public function detachBook(User $user, Author $author, Book $book)
     {
+        // If user has permission to detach book
+        // or if user is the owner of the author and book is attached to author
         return $user->role->permissions->contains('name', 'detach_book') || ($author->user_uid == $user->uid && $author->books->contains($book));
     }
 
