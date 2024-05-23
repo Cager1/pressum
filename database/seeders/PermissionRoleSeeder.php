@@ -198,9 +198,6 @@ class PermissionRoleSeeder extends Seeder
         $role->permissions()->attach(\App\Models\Permission::where('name', 'view_file')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'view_user')->first());
 
-
-
-
         $role = \App\Models\Role::where('name', 'Autor')->first();
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_book')->first());
         $role->permissions()->attach(\App\Models\Permission::where('name', 'create_file')->first());

@@ -67,6 +67,8 @@ Route::get('userRoles', [RoleController::class, 'userRoles']);
 Route::get('rolesWithUserCount', [RoleController::class, 'rolesWithUserCount']);
 // create new role
 Route::post('createRole', [RoleController::class, 'create']);
+// delete role
+Route::delete('deleteRole/{id}', [RoleController::class, 'delete']);
 
 Route::get('/booksRelations', [App\Http\Controllers\BookController::class, 'books']);
 Route::get('/booksLastSixMonths', [App\Http\Controllers\BookController::class, 'booksLastSixMonths']);

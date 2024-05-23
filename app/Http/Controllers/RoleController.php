@@ -46,4 +46,20 @@ class RoleController extends Controller
             ]);
         }
     }
+
+    // delete role
+    public function delete($id)
+    {
+        if (Auth::user()->can('delete', Role::class, )) {
+            $role = Role::find($id);
+            $role->delete();
+            return response()->json([
+                'message' => 'Uloga uspješno obrisana'
+            ]);
+        } else {
+            return response()->json([
+                'message' => "Nemate ovlasti za brisanje uloge"
+            ]);
+        }
+    }
 }

@@ -108,26 +108,12 @@ class BookController extends ResourceController
             $slug .= '-' . $slugCount ;
         }
 
-
-        $book = Book::findOrFail($id);
-
-        $book->update([
-            'name' => $request->name,
-            'isbn' => $request->isbn,
+        $request->merge([
             'slug' => $slug,
+            'created_by' => Auth::user()->uid,
         ]);
 
-        // sync sciences
-        if ($request->sciences) {
-            $book->sciences()->sync($request->sciences);
-        }
-//
-        // sync authors
-        if ($request->authors) {
-            $book->authors()->sync($request->authors);
-        }
-
-        return $book->load('authors','sciences');
+        return parent::update($request, $id);
     }
 
 

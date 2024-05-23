@@ -58,4 +58,27 @@ class AuthorController extends ResourceController
         ]);
         return $author;
     }
+
+    // update author
+    public function update(Request $request, $id)
+    {
+        $author = Author::find($id);
+        if (Auth::user()->can('update', $author)) {
+            $this->validate($request, [
+                'name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'orcid' => 'required|string',
+                'email' => 'required|string|email',
+            ]);
+            $author->update([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'orcid' => $request->orcid,
+                'email' => $request->email,
+            ]);
+            return $author;
+        } else {
+            return response()->json(['message' => 'You are not authorized to update author.'], 403);
+        }
+    }
 }

@@ -36,6 +36,20 @@ class FileController extends Controller
         $name = $request->get('name');
         $book = $request->book_id;
 
+        // if file with $book_id exists and has folder of images, delete it, and if currently uploaded file is image
+        $existing = ResourceFile::where('book_id', $book)->where('folder', 'images')->first();
+        if ($existing && str_starts_with($file->getMimeType(), 'image')) {
+            $existing->delete();
+        }
+
+        // if file with $book_id exists and has folder of books, delete all of them, and if currently uploaded file is pdf
+        $existing = ResourceFile::where('book_id', $book)->where('folder', 'books')->get();
+        if ($existing && str_starts_with($file->getMimeType(), 'application/pdf')) {
+            foreach ($existing as $e) {
+                $e->delete();
+            }
+        }
+
         return self::uploadFile($file,$book, $name, $folder, $disk);
     }
 

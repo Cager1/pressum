@@ -74,11 +74,7 @@ class ResourceController extends Controller
         if ($request->limit)
             $query->limit($request->limit);
 
-        $perPage = $request->perPage;
-        if ($perPage < 0)
-            $perPage = $query->count();
-
-        $data = $query->paginate($perPage);
+        $data = $request->perPage ? $query->paginate($request->perPage) : $query->get();
 
         if ($request->append)
             foreach ($data as &$element) {

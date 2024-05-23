@@ -10,8 +10,10 @@ class Book extends ResourceModel
     use HasFactory;
 
     protected $fillable = [
-        'name', 'isbn', 'slug', 'created_by',
+        'name', 'isbn', 'slug', 'created_by', 'impressum'
     ];
+
+    protected $appends = ['image', 'documents'];
 
     protected static $data = [
         'name' => [
@@ -21,6 +23,9 @@ class Book extends ResourceModel
             'validation' => 'required|string',
         ],
         'slug' => [
+            'validation' => 'nullable|string',
+        ],
+        'impressum' => [
             'validation' => 'nullable|string',
         ],
         'created_by' => [
@@ -52,5 +57,15 @@ class Book extends ResourceModel
         return $this->belongsToMany(User::class, 'purchases')->using(Purchase::class);
     }
 
+    public function GetImageAttribute()
+    {
+        return $this->files->where('folder', 'images')->first();
+    }
+
+    // get all files that are not images
+    public function GetDocumentsAttribute()
+    {
+        return $this->files->where('folder', 'books');
+    }
 
 }

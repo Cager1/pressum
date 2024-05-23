@@ -40,12 +40,6 @@ class ResourceFile extends ResourceModel
 
     protected $appends = ['file_url'];
 
-    public static function index(Request $request, &$query)
-    {
-        // return all images
-        $query->where('mimetype', 'like', 'image/%');
-    }
-
     public function getFileUrlAttribute()
     {
         return URL::to('/api/files/' . $this->uuid);

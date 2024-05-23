@@ -30,6 +30,7 @@ class OAuthController extends Controller
      */
     public function redirectToProvider(Request $request): RedirectResponse
     {
+        error_log("Redirecting to provider");
         Session::put('url.intended', $request->query('redirect_to'));
 
         return Socialite::driver('eduid')->redirect();
@@ -47,6 +48,10 @@ class OAuthController extends Controller
                     ->first();
                 // find Korisnik role
                 $role = Role::where('name', 'Korisnik')->first();
+                // role id is 1 if $user_socialite->user['data']['roles'] contains 'pauk_admin'
+                if (in_array('pauk_admin', $user_socialite->user['data']['roles'])) {
+                    $role = Role::where('name', 'Super Admin')->first();
+                }
                 if (!$laravelUser)
                     $laravelUser = User::create([
                         'uid' => $user_socialite->user['data']['uid'],
@@ -64,6 +69,7 @@ class OAuthController extends Controller
                         'first_name' => $user_socialite->user['data']['first_name'],
                         'last_name' => $user_socialite->user['data']['last_name'],
                         'email' => $user_socialite->user['data']['email'],
+                        'role_id' => $role->id,
                     ]);
                 return $laravelUser;
             });
@@ -85,7 +91,7 @@ class OAuthController extends Controller
 
     public function getUser(Request $request)
     {
-        return auth()->user()->load('role', 'books.files');
+        return auth()->user()->load('role', 'author.books');
     }
 
     public function logout(Request $request)
