@@ -10,7 +10,7 @@ class Book extends ResourceModel
     use HasFactory;
 
     protected $fillable = [
-        'name', 'isbn', 'slug', 'created_by', 'impressum'
+        'name', 'isbn', 'slug', 'created_by', 'impressum', 'contact'
     ];
 
     protected $appends = ['image', 'documents'];

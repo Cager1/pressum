@@ -71,6 +71,7 @@ class BookController extends ResourceController
         $request->validate([
             'name' => 'required',
             'isbn' => 'required',
+            'contact' => 'nullable',
         ]);
 
         $slug = Str::slug($request->name, '-');
@@ -85,6 +86,7 @@ class BookController extends ResourceController
         $book = Book::create([
             'name' => $request->name,
             'isbn' => $request->isbn,
+            'contact' => $request->contact,
             'slug' => $slug,
             'created_by' => Auth::user()->uid,
         ]);
@@ -110,7 +112,6 @@ class BookController extends ResourceController
 
         $request->merge([
             'slug' => $slug,
-            'created_by' => Auth::user()->uid,
         ]);
 
         return parent::update($request, $id);
