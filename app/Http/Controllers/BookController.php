@@ -72,6 +72,8 @@ class BookController extends ResourceController
             'name' => 'required',
             'isbn' => 'required',
             'contact' => 'nullable',
+            'locked' => 'boolean',
+            'locked_contact' => 'nullable'
         ]);
 
         $slug = Str::slug($request->name, '-');
@@ -87,6 +89,8 @@ class BookController extends ResourceController
             'name' => $request->name,
             'isbn' => $request->isbn,
             'contact' => $request->contact,
+            'locked' => $request->locked,
+            'locked_contact' => $request->locked_contact,
             'slug' => $slug,
             'created_by' => Auth::user()->uid,
         ]);

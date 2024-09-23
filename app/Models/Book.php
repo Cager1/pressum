@@ -10,7 +10,7 @@ class Book extends ResourceModel
     use HasFactory;
 
     protected $fillable = [
-        'name', 'isbn', 'slug', 'created_by', 'impressum', 'contact'
+        'name', 'isbn', 'slug', 'created_by', 'impressum', 'contact', 'locked', 'locked_contact'
     ];
 
     protected $appends = ['image', 'documents'];
@@ -29,6 +29,15 @@ class Book extends ResourceModel
             'validation' => 'nullable|string',
         ],
         'created_by' => [
+            'validation' => 'nullable|string',
+        ],
+        'contact' => [
+            'validation' => 'nullable|string',
+        ],
+        'locked' => [
+            'validation' => 'nullable|boolean',
+        ],
+        'locked_contact' => [
             'validation' => 'nullable|string',
         ],
     ];
