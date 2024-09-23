@@ -33,7 +33,10 @@ class Book extends ResourceModel
         ],
     ];
 
-
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class)->using(BookCategory::class);
+    }
 
     public function authors() {
         return $this->belongsToMany(Author::class)->using(AuthorBook::class);
