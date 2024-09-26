@@ -71,7 +71,7 @@ class BookController extends ResourceController
         $request->validate([
             'name' => 'required',
             'isbn' => 'required',
-            'locked' => 'boolean',
+            'locked' => 'nullable',
             'locked_contact' => 'nullable',
             'author_email' => 'nullable',
             'author_google_scholar' => 'nullable',
