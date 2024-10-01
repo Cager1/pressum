@@ -37,9 +37,14 @@ class FilePolicy
         // If file is image, allow.
         // If file is pdf, allow if file is cut version else check if user has permission or if he owns it
         // If user purchased the file, allow
+        // If book of file is not locked, allow
+        // If book of file is not cut version, allow
+        error_log($resourceFile->book->locked);
+
         return Str::contains($resourceFile->mimetype, 'image') || $resourceFile->cut_version
-            || $user->role->permissions->contains('name', 'view_file') || $user->purchases->contains('id', $resourceFile->book->id)
-            || $user->uid == $resourceFile->book->created_by;
+            || $user->role?->permissions->contains('name', 'view_file') || $user->purchases->contains('id', $resourceFile->book->id)
+            || $user->uid == $resourceFile->book->created_by
+            || (!$resourceFile->book->cut_version && !$resourceFile->book->locked);
     }
 
     /**

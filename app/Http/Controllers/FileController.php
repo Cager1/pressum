@@ -6,6 +6,7 @@ use App\Models\ResourceFile;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use mikehaertl\pdftk\Pdf;
@@ -55,8 +56,8 @@ class FileController extends Controller
 
     public function show(Request $request, ResourceFile $resourceFile)
     {
-        // user can view
-        ResourceFile::checkPolicy('view', $resourceFile);
+        // check if file can be viewed
+        $this->authorize('view', $resourceFile);
 
         return Storage::response($resourceFile->full_path, $resourceFile->name);
     }
@@ -65,8 +66,8 @@ class FileController extends Controller
         $resourceFile = ResourceFile::whereUuid($uuid)->firstOrFail();
 
         //if resource file not image or cut version check policy for view
-        if (!str_starts_with($resourceFile->mimetype, 'image/') && !$resourceFile->cut_version) {
-            ResourceFile::checkPolicy('view', $resourceFile);
+        if (!str_starts_with($resourceFile->mimetype, 'image/')) {
+            Gate::forUser(Auth::user() ?? new \App\Models\User())->authorize('view', $resourceFile);
         }
 
         return Storage::response($resourceFile->full_path, $resourceFile->name);

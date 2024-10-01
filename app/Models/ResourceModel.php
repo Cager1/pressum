@@ -158,6 +158,7 @@ class ResourceModel extends Model
 
     public static function checkPolicy($policyPermission, $model = null)
     {
+
         $user = Auth::guard('sanctum')->user();
         if ($user) {
             if ($user->can($policyPermission, $model))

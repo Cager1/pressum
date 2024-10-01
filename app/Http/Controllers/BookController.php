@@ -56,6 +56,9 @@ class BookController extends ResourceController
                 $query->where(function ($query) {
                     $query->where('mimetype', 'like', 'image/%')
                         ->orWhere('cut_version', true)
+                        ->orWhereHas('book', function ($query) {
+                            $query->where('cut_version', false);
+                        })
                         ->orWhereHas('book.purchases', function ($query) {
                             $query->where('user_id', Auth::id());
                         });
@@ -71,11 +74,12 @@ class BookController extends ResourceController
         $request->validate([
             'name' => 'required',
             'isbn' => 'required',
-            'locked' => 'nullable',
+            'locked' => 'required',
             'locked_contact' => 'nullable',
             'author_email' => 'nullable',
             'author_google_scholar' => 'nullable',
             'author_orcid' => 'nullable',
+            'cut_version' => 'required|boolean',
         ]);
 
         $slug = Str::slug($request->name, '-');
@@ -96,6 +100,7 @@ class BookController extends ResourceController
             'locked' => $request->locked,
             'locked_contact' => $request->locked_contact,
             'slug' => $slug,
+            'cut_version' => $request->cut_version,
             'created_by' => Auth::user()->uid,
         ]);
         if ($request->sciences) {
