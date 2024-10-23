@@ -50,6 +50,15 @@ class Book extends ResourceModel
         'locked_contact' => [
             'validation' => 'nullable|string',
         ],
+        'author_email' => [
+            'validation' => 'nullable|string',
+        ],
+        'author_google_scholar' => [
+            'validation' => 'nullable|string',
+        ],
+        'author_orcid' => [
+            'validation' => 'nullable|string',
+        ],
     ];
 
     public function categories()
