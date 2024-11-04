@@ -59,6 +59,9 @@ class Book extends ResourceModel
         'author_orcid' => [
             'validation' => 'nullable|string',
         ],
+        'cut_version' => [
+            'validation' => 'nullable|boolean',
+        ],
     ];
 
     public function categories()
