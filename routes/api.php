@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -31,6 +32,7 @@ $resources = [
     'authors' => AuthorController::class,
     'sciences' => ScienceController::class,
     'permissions' => PermissionController::class,
+    'categories' => CategoryController::class,
 
 ];
 
