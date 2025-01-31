@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\BookCategory;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class BookCategoryPolicy
+class CategoryPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class BookCategoryPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $bookCategory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Book $bookCategory)
+    public function view(User $user, Category $category)
     {
         return true;
     }
@@ -41,48 +41,48 @@ class BookCategoryPolicy
      */
     public function create(User $user)
     {
-        // user role permission has create_bookCategory
-        return $user->role->permissions->contains('name', 'create_bookCategory');
+        // user role permission has create_category
+        return $user->role->permissions->contains('name', 'create_category');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $bookCategory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Book $bookCategory)
+    public function update(User $user, Category $category)
     {
-        // check if user role has permission to update bookCategory and if user is the owner
-        return $user->role->permissions->contains('name', 'update_bookCategory') || $user->uid == $bookCategory->created_by;
+        // check if user role has permission to update category and if user is the owner
+        return $user->role->permissions->contains('name', 'update_category') || $user->uid == $category->created_by;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $bookCategory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Book $bookCategory)
+    public function delete(User $user, Category $category)
     {
 
-        // check if user role has permission to delete bookCategory or if user is the owner
-        return $user->role->permissions->contains('name', 'delete_bookCategory') || $user->uid === $bookCategory->created_by;
+        // check if user role has permission to delete category or if user is the owner
+        return $user->role->permissions->contains('name', 'delete_category') || $user->uid === $category->created_by;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Book  $bookCategory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Auth\Access\Response|bool
      */
 
-    public function purchase(User $user, Book $bookCategory)
+    public function purchase(User $user, Category $category)
     {
-        // if bookCategory is not public
+        // if category is not public
         return true;
     }
 }
