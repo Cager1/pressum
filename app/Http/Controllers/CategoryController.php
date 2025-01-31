@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends ResourceController
 {
+
     protected static $modelName = 'Category';
+
 }

@@ -13,6 +13,12 @@ class Category extends ResourceModel
         'name',
     ];
 
+    protected static $data = [
+        'name' => [
+            'validation' => 'string',
+        ],
+    ];
+
     public function books()
     {
         return $this->belongsToMany(Book::class);
