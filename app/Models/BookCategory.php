@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class BookCategory extends ResourcePivot
 {
     use HasFactory;
+
+    protected $fillable = [
+        'book_id',
+        'category_id'
+    ];
 }

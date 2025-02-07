@@ -55,6 +55,7 @@ class BookPolicy
     public function update(User $user, Book $book)
     {
         // check if user role has permission to update book and if user is the owner
+        error_log($user->role->permissions->contains('name', 'update_book'));
         return $user->role->permissions->contains('name', 'update_book') || $user->uid == $book->created_by;
     }
 
