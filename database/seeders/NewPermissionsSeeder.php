@@ -15,7 +15,7 @@ class NewPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        Auth::loginUsingId(12);
+        Auth::loginUsingId(1);
         $permissions = [
             // categories
             [
