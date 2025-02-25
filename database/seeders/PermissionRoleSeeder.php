@@ -124,6 +124,19 @@ class PermissionRoleSeeder extends Seeder
                 'name' => 'delete_science',
                 'description' => 'Brisanje svih znanosti',
             ],
+            // categories
+            [
+                'name' => 'create_category',
+                'description' => 'Stvaranje kategorije',
+            ],
+            [
+                'name' => 'update_category',
+                'description' => 'Ažuriranje svih kategorija',
+            ],
+            [
+                'name' => 'delete_category',
+                'description' => 'Brisanje svih kategorija',
+            ],
             // users
 
             [

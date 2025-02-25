@@ -158,7 +158,6 @@ class ResourceModel extends Model
 
     public static function checkPolicy($policyPermission, $model = null)
     {
-
         $user = Auth::guard('sanctum')->user();
         if ($user) {
             if ($user->can($policyPermission, $model))
@@ -168,6 +167,5 @@ class ResourceModel extends Model
         } else {
             abort(401, 'You are not authorized to access this resource or action!');
         }
-
     }
 }

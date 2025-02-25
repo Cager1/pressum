@@ -109,7 +109,7 @@ class BookController extends ResourceController
         if ($request->authors) {
             $book->authors()->sync($request->authors);
         }
-        return $book->load('authors','sciences');
+        return $book->load('authors','sciences', 'categories');
     }
 
     // update book

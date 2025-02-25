@@ -23,7 +23,7 @@ class Book extends ResourceModel
         'cut_version',
     ];
 
-    protected $appends = ['image', 'documents'];
+    protected $appends = ['image', 'documents', 'book_cut_version', 'book_full_version'];
 
     protected static $data = [
         'name' => [
@@ -91,15 +91,26 @@ class Book extends ResourceModel
         return $this->belongsToMany(User::class, 'purchases')->using(Purchase::class);
     }
 
-    public function GetImageAttribute()
+    public function getImageAttribute()
     {
         return $this->files->where('folder', 'images')->first();
     }
 
     // get all files that are not images
-    public function GetDocumentsAttribute()
+    public function getDocumentsAttribute()
     {
         return $this->files->where('folder', 'books');
     }
+
+    public function getBookCutVersionAttribute()
+    {
+        return $this->files->where('folder', 'books')->where('cut_version', 1)->first();
+    }
+
+    public function getBookFullVersionAttribute()
+    {
+        return $this->files->where('folder', 'books')->where('cut_version', 0)->first();
+    }
+
 
 }

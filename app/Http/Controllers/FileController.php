@@ -102,21 +102,19 @@ class FileController extends Controller
         // If file is pdf, cut all but first page
         if ($mimetype == 'application/pdf') {
             $filename = md5($file) . now()->timestamp . '.pdf';
-            $pdf = new Pdf(storage_path('app/books/' . $filename));
-            $data = $pdf->getData();
-            if (preg_match('/NumberOfPages: (\d+)/', $data, $m)) {
-                $number = $m[1];
-                if ($number > 5) {
-                    $pdf2 = new Pdf(storage_path('app/books/' . $filename));
-                    $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
-                    $result = $pdf2->cat(1,5)->saveAs(storage_path('app/books/' . $filename));
-                    if ($result === false) {
-                        return response()->json(['message' => $pdf2->getError()], 500);
-                    }
-                } else {
-                    $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
-                    $pdf->saveAs(storage_path('app/books/' . $filename));
+            $pdf = new Fpdi();
+            $pageCount = $pdf->setSourceFile(storage_path('app/books/' . $filename));
+            error_log('Number of pages: ' . $pageCount);
+            if ($pageCount > 3) {
+                $pdf2 = new Pdf(storage_path('app/books/' . $filename));
+                $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
+                $result = $pdf2->cat(1, 3)->saveAs(storage_path('app/books/' . $filename));
+                if ($result === false) {
+                    return response()->json(['message' => $pdf2->getError()], 500);
                 }
+            } else {
+                $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
+                $pdf->saveAs(storage_path('app/books/' . $filename));
             }
 
             $cutPdf = ResourceFile::create([
