@@ -100,31 +100,53 @@ class FileController extends Controller
 
         $cutPdf= null;
         // If file is pdf, cut all but first page
-        if ($mimetype == 'application/pdf') {
-            $filename = md5($file) . now()->timestamp . '.pdf';
-            $pdf = new Fpdi();
-            $pageCount = $pdf->setSourceFile(storage_path('app/books/' . $filename));
-            error_log('Number of pages: ' . $pageCount);
-            if ($pageCount > 3) {
-                $pdf2 = new Pdf(storage_path('app/books/' . $filename));
-                $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
-                $result = $pdf2->cat(1, 3)->saveAs(storage_path('app/books/' . $filename));
-                if ($result === false) {
-                    return response()->json(['message' => $pdf2->getError()], 500);
-                }
-            } else {
-                $filename = md5($file) . now()->timestamp . 'cut-version.pdf';
-                $pdf->saveAs(storage_path('app/books/' . $filename));
-            }
+       if ($mimetype == 'application/pdf') {
+            // First save the original file to a temporary location we can work with
+            $tempFilename = md5($file) . now()->timestamp . '.pdf';
+            $tempPath = storage_path('app/books/' . $tempFilename);
+            file_put_contents($tempPath, file_get_contents($file));
 
-            $cutPdf = ResourceFile::create([
-                'name' => $name,
-                'filepath' => $filename,
-                'mimetype' => $mimetype,
-                'folder' => $folder,
-                'book_id' => $book,
-                'cut_version' => true,
-            ]);
+            try {
+                // Now we can analyze the saved file
+                $pdf = new Fpdi();
+                $pageCount = $pdf->setSourceFile($tempPath);
+                error_log('Number of pages: ' . $pageCount);
+
+                // Generate the cut version filename
+                $cutFilename = md5($file) . now()->timestamp . 'cut-version.pdf';
+                $cutPath = storage_path('app/books/' . $cutFilename);
+
+                if ($pageCount > 3) {
+                    // Use pdftk for larger documents
+                    $pdf2 = new Pdf($tempPath);
+                    $result = $pdf2->cat(1, 3)->saveAs($cutPath);
+                    if ($result === false) {
+                        return response()->json(['message' => $pdf2->getError()], 500);
+                    }
+                } else {
+                    // Use FPDI for smaller documents
+                    $pdf = new Fpdi();
+                    $pdf->setSourceFile($tempPath);
+                    for ($i = 1; $i <= $pageCount; $i++) {
+                        $template = $pdf->importPage($i);
+                        $pdf->AddPage();
+                        $pdf->useTemplate($template);
+                    }
+                    $pdf->Output($cutPath, 'F');
+                }
+
+                $cutPdf = ResourceFile::create([
+                    'name' => $name,
+                    'filepath' => $cutFilename,
+                    'mimetype' => $mimetype,
+                    'folder' => $folder,
+                    'book_id' => $book,
+                    'cut_version' => true,
+                ]);
+            } catch (\Exception $e) {
+                error_log('PDF processing error: ' . $e->getMessage());
+                // Handle the error gracefully
+            }
         }
 
         if (!$name)
