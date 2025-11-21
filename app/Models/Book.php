@@ -23,7 +23,7 @@ class Book extends ResourceModel
         'cut_version',
     ];
 
-    protected $appends = ['image', 'documents', 'book_cut_version', 'book_full_version'];
+    protected $appends = ['image', 'documents', 'book_cut_version', 'book_full_version', 'book_chapters'];
 
     protected static $data = [
         'name' => [
@@ -110,6 +110,11 @@ class Book extends ResourceModel
     public function getBookFullVersionAttribute()
     {
         return $this->files->where('folder', 'books')->where('cut_version', 0)->first();
+    }
+
+    public function getBookChaptersAttribute()
+    {
+        return $this->files->where('folder', 'chapters')->values();
     }
 
 
